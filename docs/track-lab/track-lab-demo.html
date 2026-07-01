@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Lab — Organized AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F3EEE1;
+    --cream-2:#EAE2CC;
+    --ink:#17140F;
+    --ink-70:rgba(23,20,15,.7);
+    --ink-45:rgba(23,20,15,.45);
+    --line:#C7BB9C;
+    --green:#1F7A45;
+    --green-bg:#DEEDE0;
+    --gold:#F5D623;
+    --gold-ink:#17140F;
+    --red:#C13A22;
+    --red-bg:#F3DCD1;
+    --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-font-smoothing:antialiased;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    padding:18px;
+  }
+  a{color:inherit;}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    border:2px solid var(--ink);
+    background:var(--ink);
+    color:var(--cream);
+    padding:12px 18px;
+    gap:12px;flex-wrap:wrap;
+  }
+  .wordmark{
+    font-family:var(--font-mono);font-weight:800;letter-spacing:.02em;
+    font-size:14px;text-transform:uppercase;display:flex;align-items:center;gap:10px;
+  }
+  .wordmark .divider{opacity:.4;font-weight:400;}
+  .badges{display:flex;gap:8px;flex-wrap:wrap;}
+  .badge{
+    font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;padding:5px 10px;border:1.5px solid currentColor;border-radius:999px;
+    display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  }
+  .badge.on-dark{color:var(--cream);}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .badge.green{color:var(--green);}
+  .badge.gold{color:var(--gold);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    border:2px solid var(--ink);border-top:none;
+    background:var(--cream);
+    padding:34px 28px 28px;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-70);margin-bottom:10px;
+  }
+  h1{
+    font-family:var(--font-mono);font-weight:800;
+    font-size:clamp(28px,4.2vw,46px);
+    line-height:1.04;letter-spacing:-0.01em;
+    max-width:18ch;
+  }
+  .sub{
+    margin-top:14px;max-width:60ch;
+    font-size:16px;color:var(--ink-70);
+  }
+  .sub code{
+    font-family:var(--font-mono);background:var(--cream-2);
+    padding:1px 5px;border-radius:3px;font-size:14px;
+  }
+
+  /* ---------- scenario tabs ---------- */
+  .scenario-tabs{
+    margin-top:22px;display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .tab-btn{
+    font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.03em;
+    text-transform:uppercase;padding:10px 16px;cursor:pointer;text-align:left;
+    border:1.5px solid var(--ink);background:var(--cream);color:var(--ink);
+  }
+  .tab-btn .tnum{opacity:.5;margin-right:6px;}
+  .tab-btn .tsrc{
+    display:block;font-family:var(--font-body);font-weight:400;text-transform:none;
+    font-size:11px;color:var(--ink-45);letter-spacing:0;margin-top:2px;
+  }
+  .tab-btn.active{background:var(--ink);color:var(--cream);}
+  .tab-btn.active .tsrc{color:rgba(243,238,225,.55);}
+  .tab-btn.active .tnum{opacity:.6;}
+  .tab-btn:hover:not(.active):not(:disabled){background:var(--cream-2);}
+  .tab-btn:disabled{opacity:.5;cursor:default;}
+
+  .hero-controls{
+    margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .run-btn{
+    font-family:var(--font-mono);font-weight:700;font-size:14px;letter-spacing:.02em;
+    background:var(--gold);color:var(--gold-ink);
+    border:2px solid var(--ink);padding:13px 22px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .12s ease;
+  }
+  .run-btn:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink);}
+  .run-btn:active{transform:translate(0,0);box-shadow:none;}
+  .run-btn:disabled{opacity:.55;cursor:default;transform:none;box-shadow:none;}
+
+  .status-pill{
+    font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;padding:8px 14px;border:1.5px solid var(--ink);
+    display:inline-flex;align-items:center;gap:8px;background:var(--cream-2);
+  }
+  .status-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-45);}
+  .status-pill.running .dot{background:var(--gold);animation:pulse 1s infinite;}
+  .status-pill.done .dot{background:var(--ink);}
+  .promptid{
+    font-family:var(--font-mono);font-size:12px;color:var(--ink-45);
+    margin-left:auto;white-space:nowrap;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+  /* ---------- stage grid ---------- */
+  .stage{
+    display:grid;
+    grid-template-columns:1fr 1.35fr;
+    grid-template-rows:auto 1fr;
+    gap:2px;background:var(--ink);
+    border:2px solid var(--ink);border-top:none;
+  }
+  .panel{background:var(--cream);display:flex;flex-direction:column;min-width:0;}
+  .panel-head{
+    font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-70);
+    padding:10px 14px;border-bottom:1.5px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .panel-body{padding:14px;}
+
+  .p-prompt{grid-column:1;grid-row:1;}
+  .p-timeline{grid-column:1;grid-row:2;}
+  .p-execute{grid-column:2;grid-row:1 / 3;background:var(--ink);}
+  .p-execute .panel-head{color:var(--cream);border-bottom-color:rgba(243,238,225,.2);}
+  .p-execute .panel-body{
+    font-family:var(--font-mono);font-size:12.5px;color:var(--cream);
+    flex:1;overflow-y:auto;max-height:460px;
+  }
+
+  .prompt-text{font-size:14.5px;line-height:1.6;}
+  .prompt-role{
+    font-family:var(--font-mono);font-size:10.5px;font-weight:700;color:var(--ink-45);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
+  }
+
+  .timeline{list-style:none;}
+  .timeline li{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:10px 0;border-bottom:1px solid var(--line);
+    font-family:var(--font-mono);font-size:12.5px;
+  }
+  .timeline li:last-child{border-bottom:none;}
+  .t-marker{
+    width:16px;height:16px;border-radius:50%;border:1.5px solid var(--ink-45);
+    flex:0 0 auto;margin-top:2px;position:relative;
+  }
+  .timeline li.running .t-marker{border-color:var(--gold);}
+  .timeline li.running .t-marker::after{
+    content:'';position:absolute;inset:3px;border-radius:50%;background:var(--gold);
+    animation:pulse .9s infinite;
+  }
+  .timeline li.done .t-marker{background:var(--green);border-color:var(--green);}
+  .timeline li.done .t-marker::after{
+    content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--cream);font-size:10px;
+  }
+  .timeline li.reverted .t-marker{background:var(--red);border-color:var(--red);}
+  .timeline li.reverted .t-marker::after{
+    content:'×';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--cream);font-size:11px;
+  }
+  .t-body{flex:1;min-width:0;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+  .t-main{min-width:0;}
+  .t-cmd{color:var(--ink);word-break:break-word;}
+  .t-tool{color:var(--ink-45);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;}
+  .t-lat{color:var(--ink-45);font-size:11px;white-space:nowrap;margin-top:2px;}
+  .timeline li.done .t-lat{color:var(--green);}
+  .timeline li.reverted .t-lat{color:var(--red);}
+  .t-score{
+    flex:0 0 auto;font-weight:700;font-size:12px;white-space:nowrap;
+    color:var(--ink-45);margin-top:1px;
+  }
+  .timeline li.done .t-score{color:var(--green);}
+  .timeline li.reverted .t-score{color:var(--red);}
+
+  .log-line{white-space:pre-wrap;word-break:break-word;opacity:0;animation:fadein .15s forwards;}
+  @keyframes fadein{to{opacity:1;}}
+  .log-line.info{color:#C9C2AB;}
+  .log-line.cmd{color:var(--cream);font-weight:700;margin-top:10px;}
+  .log-line.cmd:first-child{margin-top:0;}
+  .log-line.ok{color:#7FD99A;}
+  .log-line.warn{color:var(--gold);}
+  .log-line.fail{color:#F08A6E;}
+  .cursor{display:inline-block;width:7px;height:13px;background:var(--gold);vertical-align:-2px;animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- meter ---------- */
+  .meter{
+    border:2px solid var(--ink);border-top:none;
+    background:var(--cream-2);
+    display:flex;flex-wrap:wrap;
+  }
+  .meter-item{
+    flex:1 1 130px;padding:14px 18px;
+    border-right:1.5px solid var(--line);
+  }
+  .meter-item:last-child{border-right:none;}
+  .meter-item.hidden-meter{display:none;}
+  .meter-label{
+    font-family:var(--font-mono);font-size:10.5px;font-weight:700;color:var(--ink-45);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;
+  }
+  .meter-value{font-family:var(--font-mono);font-size:20px;font-weight:700;}
+  .meter-value.gold{color:#8A6A00;}
+  .meter-value.green{color:var(--green);}
+
+  /* ---------- findings ---------- */
+  .findings{
+    border:2px solid var(--ink);border-top:none;
+    background:var(--cream);padding:20px;
+    opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease;pointer-events:none;
+  }
+  .findings.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+  .findings-head{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    margin-bottom:16px;
+  }
+  .findings-title{font-family:var(--font-mono);font-weight:800;font-size:16px;}
+  .writes-chip{
+    font-family:var(--font-mono);font-size:11.5px;font-weight:700;letter-spacing:.04em;
+    background:var(--green-bg);color:var(--green);border:1.5px solid var(--green);
+    padding:6px 12px;border-radius:999px;
+  }
+  .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--ink);border:1.5px solid var(--ink);}
+  .fcard{background:var(--cream-2);padding:14px;}
+  .fcard.fail{background:var(--red-bg);}
+  .fcard.warn{background:#FBF0C4;}
+  .ftag{
+    display:inline-block;font-family:var(--font-mono);font-size:10.5px;font-weight:800;
+    letter-spacing:.06em;padding:3px 8px;margin-bottom:8px;
+  }
+  .fcard.fail .ftag{background:var(--red);color:var(--cream);}
+  .fcard.warn .ftag{background:var(--gold);color:var(--gold-ink);}
+  .fname{font-family:var(--font-mono);font-weight:700;font-size:13px;margin-bottom:4px;}
+  .fdesc{font-size:12.5px;color:var(--ink-70);line-height:1.4;}
+
+  /* ---------- ladder footer ---------- */
+  .ladder{
+    border:2px solid var(--ink);border-top:none;
+    background:var(--ink);color:var(--cream);
+    padding:16px 20px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+  }
+  .rung{font-family:var(--font-mono);font-size:12px;text-align:center;padding:8px 12px;}
+  .rung strong{display:block;font-size:13.5px;font-weight:800;}
+  .rung span{color:rgba(243,238,225,.6);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;}
+  .rung.current strong{color:var(--gold);}
+  .arrow{color:rgba(243,238,225,.35);font-size:14px;}
+
+  .finePrint{
+    text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--ink-45);
+    padding:16px 10px 4px;letter-spacing:.02em;
+  }
+
+  @media (max-width:860px){
+    .stage{grid-template-columns:1fr;grid-template-rows:auto auto auto;}
+    .p-prompt{grid-column:1;grid-row:1;}
+    .p-timeline{grid-column:1;grid-row:2;}
+    .p-execute{grid-column:1;grid-row:3;}
+    .fgrid{grid-template-columns:1fr 1fr;}
+    .meter-item{flex:1 1 45%;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .status-pill.running .dot,.timeline li.running .t-marker::after,.cursor{animation:none;}
+    .findings{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="wordmark">ORGANIZED AI <span class="divider">//</span> TRACK LAB</div>
+    <div class="badges">
+      <span class="badge green on-dark"><span class="dot"></span>SANDBOX · TRACK_MODE=sandbox</span>
+      <span class="badge gold on-dark"><span class="dot"></span>FREE REPLAY</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">Recorded sandbox session · Organized Tracking</div>
+    <h1>This is the real agent log.</h1>
+    <p class="sub" id="heroSub">Not a demo animation — this replays an actual <code>track doctor</code> run against a seeded sandbox account, shaped from Claude Code's own OpenTelemetry: prompt → tool call → execute → tool result → tokens.</p>
+
+    <div class="scenario-tabs" id="scenarioTabs">
+      <button class="tab-btn active" data-scenario="s1">
+        <span class="tnum">S1</span>Tracking audit
+        <span class="tsrc">organized-tracking · track doctor</span>
+      </button>
+      <button class="tab-btn" data-scenario="s7">
+        <span class="tnum">S7</span>Autoresearch loop
+        <span class="tsrc">gtm-autoresearch · run-gtm-loop.ts</span>
+      </button>
+    </div>
+
+    <div class="hero-controls">
+      <button class="run-btn" id="runBtn">▶ Run the audit</button>
+      <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Queued</span></span>
+      <span class="promptid" id="promptId">prompt.id 7f3a19e2-88b4</span>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="panel p-prompt">
+      <div class="panel-head">Prompt</div>
+      <div class="panel-body">
+        <div class="prompt-role">Operator</div>
+        <div class="prompt-text" id="promptText">Audit the demo account's conversion tracking. Run <code>track doctor</code> and flag every integrity issue before making any changes.</div>
+      </div>
+    </div>
+
+    <div class="panel p-timeline">
+      <div class="panel-head"><span id="timelineHeading">Tool timeline</span></div>
+      <div class="panel-body">
+        <ul class="timeline" id="timeline"></ul>
+      </div>
+    </div>
+
+    <div class="panel p-execute">
+      <div class="panel-head"><span>Execute · stdout / stderr</span><span id="elapsed">0.0s</span></div>
+      <div class="panel-body" id="execBody"><span class="log-line info">$ waiting for run<span class="cursor"></span></span></div>
+    </div>
+  </div>
+
+  <div class="meter">
+    <div class="meter-item"><div class="meter-label">Tokens in</div><div class="meter-value" id="mIn">0</div></div>
+    <div class="meter-item"><div class="meter-label">Tokens out</div><div class="meter-value" id="mOut">0</div></div>
+    <div class="meter-item"><div class="meter-label">Cache read</div><div class="meter-value" id="mCache">0%</div></div>
+    <div class="meter-item"><div class="meter-label">Cost est.</div><div class="meter-value gold" id="mCost">$0.00</div></div>
+    <div class="meter-item"><div class="meter-label">Latency</div><div class="meter-value" id="mLat">0.0s</div></div>
+    <div class="meter-item hidden-meter" id="mScoreWrap"><div class="meter-label">Signal score</div><div class="meter-value green" id="mScore">—</div></div>
+  </div>
+
+  <div class="findings" id="findings">
+    <div class="findings-head">
+      <div class="findings-title" id="findingsTitle">4 issues found</div>
+      <div class="writes-chip" id="writesChip">✓ 0 writes made — dry-run, paused</div>
+    </div>
+    <div class="fgrid" id="fgrid"></div>
+  </div>
+
+  <div class="ladder">
+    <div class="rung current"><strong>Free replay</strong><span>You are here</span></div>
+    <div class="arrow">→</div>
+    <div class="rung"><strong>$75/mo Skool</strong><span>Run it live</span></div>
+    <div class="arrow">→</div>
+    <div class="rung"><strong>$750 suite</strong><span>Engine + 1 recipe</span></div>
+    <div class="arrow">→</div>
+    <div class="rung"><strong>$1500 suite</strong><span>Full license</span></div>
+  </div>
+
+  <div class="finePrint">Reads via Meta official tooling + Stape partner MCP · Loop scoring by gtm-autoresearch · Writes always via track-cli · Apache-2.0 throughout</div>
+
+</div>
+
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lineDelay = reduceMotion ? 0 : 55;
+  const stepGap = reduceMotion ? 0 : 260;
+
+  const scenarios = {
+    s1: {
+      promptId: '7f3a19e2-88b4',
+      runLabel: '▶ Run the audit',
+      heroSub: 'Not a demo animation — this replays an actual <code>track doctor</code> run against a seeded sandbox account, shaped from Claude Code\'s own OpenTelemetry: prompt → tool call → execute → tool result → tokens.',
+      promptText: 'Audit the demo account\'s conversion tracking. Run <code>track doctor</code> and flag every integrity issue before making any changes.',
+      timelineHeading: 'Tool timeline',
+      findingsTitle: '4 issues found',
+      writesChip: '✓ 0 writes made — dry-run, paused',
+      findingsCards: [
+        {tag:'fail', name:'Dedup', desc:'37 duplicate "Purchase" events in a 24h window.'},
+        {tag:'fail', name:'Tag trigger', desc:'Server Purchase tag fires on every pageview, not the purchase event.'},
+        {tag:'warn', name:'Consent', desc:'2 of 6 regions fire before consent default initializes.'},
+        {tag:'warn', name:'EMQ', desc:'Event Match Quality 4.1/10 — missing hashed email + phone.'}
+      ],
+      steps: [
+        {
+          label:'meta', cmd:'track meta pixel:diagnostics --account demo-9021', latency:640,
+          usage:{in:320,out:210}, cache:0, cost:0.01,
+          lines:[
+            {t:'$ track meta pixel:diagnostics --account demo-9021 --mode sandbox', tag:'cmd'},
+            {t:'> fetching CAPI event log (last 7d, sampled 1,204 events)...', tag:'info'},
+            {t:'> computing Event Match Quality...', tag:'info'},
+            {t:'  EMQ 4.1 / 10                                    [LOW]', tag:'warn'},
+            {t:'> scanning for duplicate event_id within 24h window...', tag:'info'},
+            {t:'  37 duplicate "Purchase" events found             [FAIL]', tag:'fail'}
+          ]
+        },
+        {
+          label:'gtm', cmd:'track gtm inspect --container GTM-DEMO21', latency:410,
+          usage:{in:260,out:180}, cache:58, cost:0.01,
+          lines:[
+            {t:'$ track gtm inspect --container GTM-DEMO21 --mode sandbox', tag:'cmd'},
+            {t:'> reading published container v14...', tag:'info'},
+            {t:'> checking tag "FB - Purchase - Server" trigger binding...', tag:'info'},
+            {t:'  bound to "All Pages", expected "Purchase - Custom Event"  [FAIL]', tag:'fail'}
+          ]
+        },
+        {
+          label:'stape', cmd:'track stape consent:check --container GTM-DEMO21', latency:260,
+          usage:{in:210,out:140}, cache:74, cost:0.01,
+          lines:[
+            {t:'$ track stape consent:check --container GTM-DEMO21 --mode sandbox', tag:'cmd'},
+            {t:'> querying consent_state initialization order (via Stape partner MCP)...', tag:'info'},
+            {t:'  2 of 6 regions fire before consent default is set (EEA)  [WARN]', tag:'warn'}
+          ]
+        },
+        {
+          label:'doctor', cmd:'track doctor --mode sandbox --write dry-run', latency:520,
+          usage:{in:450,out:300}, cache:91, cost:0.01,
+          lines:[
+            {t:'$ track doctor --mode sandbox --write dry-run', tag:'cmd'},
+            {t:'> cross-referencing findings against funnel steps...', tag:'info'},
+            {t:'> 4 issues found · 0 writes made', tag:'ok'},
+            {t:'    dedup           FAIL', tag:'fail'},
+            {t:'    tag-trigger     FAIL', tag:'fail'},
+            {t:'    consent         WARN', tag:'warn'},
+            {t:'    EMQ             LOW', tag:'warn'},
+            {t:'> CLI owns all writes — paused, awaiting operator confirmation.', tag:'ok'}
+          ]
+        }
+      ]
+    },
+
+    s7: {
+      promptId: 'c2e08a41-fd6c',
+      runLabel: '▶ Run the loop',
+      heroSub: 'Not a demo animation — shaped from gtm-autoresearch\'s real first run: <code>run-gtm-loop.ts</code> scores the container across 12 dimensions, mutates via Claude, validates in staging, and keeps or reverts. Never publishes to live.',
+      promptText: 'Run the nightly autoresearch loop against the seeded snapshot. Score the container across all 12 dimensions, mutate the lowest-scoring lever, validate in staging, and keep or revert.',
+      timelineHeading: 'Round timeline',
+      findingsTitle: '4 levers remain — 91.2% signal score',
+      writesChip: '✓ winning config staged — 0 live publishes',
+      startScore: 84.3,
+      findingsCards: [
+        {tag:'warn', name:'Consent', desc:'Init tag added, but not every tag has consentStatus: NEEDED yet. 60%.'},
+        {tag:'warn', name:'Funnel integrity', desc:'Drop-off ratios sit outside Shopify ecom norms. 70%.'},
+        {tag:'warn', name:'Google Ads alignment', desc:'Missing conversion tags for active Google Ads actions. 80%.'},
+        {tag:'warn', name:'Variable hygiene', desc:'Orphan and reference issues remain. 87.5%.'}
+      ],
+      steps: [
+        {
+          label:'round 1', cmd:'npx tsx scripts/run-gtm-loop.ts --round 1', latency:2100,
+          usage:{in:640,out:410}, cache:0, cost:0.02, action:'keep', scoreAfter:'89.6%',
+          lines:[
+            {t:'$ npx tsx scripts/run-gtm-loop.ts --round 1', tag:'cmd'},
+            {t:'> scoring container: shopify-ecom-web.json (12 dimensions)...', tag:'info'},
+            {t:'  baseline score 84.3%', tag:'info'},
+            {t:'> lowest levers: dedup, trigger quality, tag coverage, folder org', tag:'info'},
+            {t:'> mutating via Claude — structural cleanup pass...', tag:'info'},
+            {t:'> validating in staging preview (Playwright QA)...', tag:'info'},
+            {t:'  score 84.3% → 89.6%                              [KEEP]', tag:'ok'}
+          ]
+        },
+        {
+          label:'round 2', cmd:'npx tsx scripts/run-gtm-loop.ts --round 2', latency:1900,
+          usage:{in:590,out:380}, cache:41, cost:0.02, action:'revert', scoreAfter:'87.1%',
+          lines:[
+            {t:'$ npx tsx scripts/run-gtm-loop.ts --round 2', tag:'cmd'},
+            {t:'> scoring container... 89.6%', tag:'info'},
+            {t:'> lowest lever: consent settings (60%)', tag:'info'},
+            {t:'> mutating via Claude — set consentStatus: NEEDED on all remaining tags...', tag:'info'},
+            {t:'> validating in staging preview...', tag:'info'},
+            {t:'  2 tags now fire before consent default initializes  [REGRESSION]', tag:'fail'},
+            {t:'  score 89.6% → 87.1%                              [REVERT]', tag:'warn'}
+          ]
+        },
+        {
+          label:'round 3', cmd:'npx tsx scripts/run-gtm-loop.ts --round 3', latency:1850,
+          usage:{in:560,out:360}, cache:64, cost:0.02, action:'revert', scoreAfter:'88.0%',
+          lines:[
+            {t:'$ npx tsx scripts/run-gtm-loop.ts --round 3', tag:'cmd'},
+            {t:'> scoring container... 89.6% (reverted to round 1 winner)', tag:'info'},
+            {t:'> lowest lever: Google Ads alignment (80%)', tag:'info'},
+            {t:'> mutating via Claude — add conversion tags for 3 active GAds actions...', tag:'info'},
+            {t:'> validating in staging preview...', tag:'info'},
+            {t:'  new tags bound to wrong trigger, funnel ratio anomaly  [REGRESSION]', tag:'fail'},
+            {t:'  score 89.6% → 88.0%                              [REVERT]', tag:'warn'}
+          ]
+        },
+        {
+          label:'round 4', cmd:'npx tsx scripts/run-gtm-loop.ts --round 4', latency:1780,
+          usage:{in:540,out:350}, cache:73, cost:0.02, action:'revert', scoreAfter:'88.9%',
+          lines:[
+            {t:'$ npx tsx scripts/run-gtm-loop.ts --round 4', tag:'cmd'},
+            {t:'> scoring container... 89.6% (reverted to round 1 winner)', tag:'info'},
+            {t:'> lowest lever: funnel integrity (70%)', tag:'info'},
+            {t:'> mutating via Claude — reorder add_to_cart → initiate_checkout triggers...', tag:'info'},
+            {t:'> validating in staging preview...', tag:'info'},
+            {t:'  Meta Ads alignment tag mapping broke               [REGRESSION]', tag:'fail'},
+            {t:'  score 89.6% → 88.9%                              [REVERT]', tag:'warn'}
+          ]
+        },
+        {
+          label:'round 5', cmd:'npx tsx scripts/run-gtm-loop.ts --round 5', latency:2050,
+          usage:{in:610,out:400}, cache:85, cost:0.02, action:'keep', scoreAfter:'91.2%',
+          lines:[
+            {t:'$ npx tsx scripts/run-gtm-loop.ts --round 5', tag:'cmd'},
+            {t:'> scoring container... 89.6% (reverted to round 1 winner)', tag:'info'},
+            {t:'> lowest levers: Meta Ads alignment, CAPI coverage, naming', tag:'info'},
+            {t:'> mutating via Claude — align Meta tags + CAPI dedup keys + naming prefixes...', tag:'info'},
+            {t:'> validating in staging preview...', tag:'info'},
+            {t:'  score 89.6% → 91.2%                              [KEEP]', tag:'ok'},
+            {t:'> 5 rounds complete · 2 kept · 3 reverted · winning config staged', tag:'ok'},
+            {t:'> never publishes to live — review the winner, then one-click publish.', tag:'ok'}
+          ]
+        }
+      ]
+    }
+  };
+
+  let currentKey = 's1';
+  let running = false;
+  let totals = {in:0,out:0,lat:0,cost:0};
+  let bestScore = null;
+  let timerHandle = null;
+  let elapsedMs = 0;
+
+  const runBtn = document.getElementById('runBtn');
+  const statusPill = document.getElementById('statusPill');
+  const statusText = document.getElementById('statusText');
+  const execBody = document.getElementById('execBody');
+  const elapsedEl = document.getElementById('elapsed');
+  const timelineEl = document.getElementById('timeline');
+  const findings = document.getElementById('findings');
+  const fgrid = document.getElementById('fgrid');
+  const findingsTitle = document.getElementById('findingsTitle');
+  const writesChip = document.getElementById('writesChip');
+  const heroSub = document.getElementById('heroSub');
+  const promptTextEl = document.getElementById('promptText');
+  const promptIdEl = document.getElementById('promptId');
+  const timelineHeadingEl = document.getElementById('timelineHeading');
+  const tabs = document.querySelectorAll('.tab-btn');
+  const mIn = document.getElementById('mIn');
+  const mOut = document.getElementById('mOut');
+  const mCache = document.getElementById('mCache');
+  const mCost = document.getElementById('mCost');
+  const mLat = document.getElementById('mLat');
+  const mScoreWrap = document.getElementById('mScoreWrap');
+  const mScore = document.getElementById('mScore');
+
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+  function setStatus(mode){
+    statusPill.className = 'status-pill' + (mode==='running' ? ' running' : mode==='done' ? ' done' : '');
+    statusText.textContent = mode==='running' ? 'Running' : mode==='done' ? 'Paused — awaiting confirm' : 'Queued';
+  }
+
+  function buildTimelineItems(scn){
+    timelineEl.innerHTML = '';
+    scn.steps.forEach((step, i)=>{
+      const li = document.createElement('li');
+      li.dataset.step = i;
+      const scoreHTML = step.action ? '<span class="t-score"></span>' : '';
+      li.innerHTML =
+        '<div class="t-marker"></div>' +
+        '<div class="t-body"><div class="t-main">' +
+          '<div class="t-tool">' + step.label + '</div>' +
+          '<div class="t-cmd">' + step.cmd + '</div>' +
+          '<div class="t-lat"></div>' +
+        '</div>' + scoreHTML + '</div>';
+      timelineEl.appendChild(li);
+    });
+  }
+
+  function buildFindings(scn){
+    findingsTitle.textContent = scn.findingsTitle;
+    writesChip.textContent = scn.writesChip;
+    fgrid.innerHTML = '';
+    scn.findingsCards.forEach(card=>{
+      const div = document.createElement('div');
+      div.className = 'fcard ' + card.tag;
+      div.innerHTML =
+        '<span class="ftag">' + card.tag.toUpperCase() + '</span>' +
+        '<div class="fname">' + card.name + '</div>' +
+        '<div class="fdesc">' + card.desc + '</div>';
+      fgrid.appendChild(div);
+    });
+  }
+
+  function applyScenario(key){
+    currentKey = key;
+    const scn = scenarios[key];
+    heroSub.innerHTML = scn.heroSub;
+    promptTextEl.innerHTML = scn.promptText;
+    promptIdEl.textContent = 'prompt.id ' + scn.promptId;
+    timelineHeadingEl.textContent = scn.timelineHeading;
+    runBtn.textContent = scn.runLabel;
+    mScoreWrap.classList.toggle('hidden-meter', !scn.startScore);
+    buildTimelineItems(scn);
+    buildFindings(scn);
+    resetUI();
+    tabs.forEach(b=>b.classList.toggle('active', b.dataset.scenario === key));
+  }
+
+  function resetUI(){
+    execBody.innerHTML = '<span class="log-line info">$ waiting for run<span class="cursor"></span></span>';
+    document.querySelectorAll('#timeline li').forEach(li=>{
+      li.className='';
+      li.querySelector('.t-lat').textContent='';
+      const sc = li.querySelector('.t-score');
+      if(sc) sc.textContent='';
+    });
+    findings.classList.remove('visible');
+    totals = {in:0,out:0,lat:0,cost:0};
+    bestScore = scenarios[currentKey].startScore || null;
+    mIn.textContent='0'; mOut.textContent='0'; mCache.textContent='0%'; mCost.textContent='$0.00'; mLat.textContent='0.0s';
+    mScore.textContent = bestScore ? bestScore.toFixed(1) + '%' : '—';
+    elapsedMs = 0; elapsedEl.textContent='0.0s';
+    setStatus('idle');
+  }
+
+  function startTimer(){
+    timerHandle = setInterval(()=>{ elapsedMs += 100; elapsedEl.textContent = (elapsedMs/1000).toFixed(1)+'s'; }, 100);
+  }
+  function stopTimer(){ clearInterval(timerHandle); }
+
+  async function printLines(lines){
+    execBody.innerHTML = '';
+    for(const line of lines){
+      const span = document.createElement('span');
+      span.className = 'log-line ' + line.tag;
+      span.textContent = line.t;
+      execBody.appendChild(span);
+      execBody.appendChild(document.createElement('br'));
+      execBody.scrollTop = execBody.scrollHeight;
+      await sleep(lineDelay);
+    }
+    const cursor = document.createElement('span');
+    cursor.className = 'log-line info';
+    cursor.innerHTML = '<span class="cursor"></span>';
+    execBody.appendChild(cursor);
+  }
+
+  async function runStep(i){
+    const scn = scenarios[currentKey];
+    const step = scn.steps[i];
+    const li = document.querySelectorAll('#timeline li')[i];
+    li.className = 'running';
+    await printLines(step.lines);
+    await sleep(stepGap);
+
+    totals.in += step.usage.in;
+    totals.out += step.usage.out;
+    totals.lat += step.latency;
+    totals.cost += step.cost;
+
+    mIn.textContent = totals.in.toLocaleString();
+    mOut.textContent = totals.out.toLocaleString();
+    mCache.textContent = step.cache + '%';
+    mCost.textContent = '$' + totals.cost.toFixed(2);
+    mLat.textContent = (totals.lat/1000).toFixed(1) + 's';
+
+    if(step.action === 'revert'){
+      li.className = 'reverted';
+      li.querySelector('.t-lat').textContent = step.latency + 'ms';
+      const sc = li.querySelector('.t-score');
+      if(sc) sc.textContent = step.scoreAfter + ' revert';
+    } else {
+      li.className = 'done';
+      li.querySelector('.t-lat').textContent = step.latency + 'ms';
+      if(step.action === 'keep'){
+        bestScore = parseFloat(step.scoreAfter);
+        const sc = li.querySelector('.t-score');
+        if(sc) sc.textContent = step.scoreAfter + ' keep';
+      }
+    }
+    if(scn.startScore) mScore.textContent = bestScore.toFixed(1) + '%';
+  }
+
+  async function runAll(){
+    if(running) return;
+    running = true;
+    resetUI();
+    runBtn.disabled = true;
+    tabs.forEach(b=>b.disabled = true);
+    runBtn.textContent = '▶ Running…';
+    setStatus('running');
+    startTimer();
+
+    const scn = scenarios[currentKey];
+    for(let i=0;i<scn.steps.length;i++){
+      await runStep(i);
+    }
+
+    stopTimer();
+    setStatus('done');
+    findings.classList.add('visible');
+    runBtn.disabled = false;
+    tabs.forEach(b=>b.disabled = false);
+    runBtn.textContent = scn.runLabel === '▶ Run the loop' ? '↻ Replay loop' : '↻ Replay';
+    running = false;
+  }
+
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(running) return;
+      applyScenario(btn.dataset.scenario);
+    });
+  });
+
+  runBtn.addEventListener('click', runAll);
+  applyScenario('s1');
+})();
+</script>
+</body>
+</html>
