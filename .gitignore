@@ -1,0 +1,16 @@
+# Local Claude settings
+.claude/settings.local.json
+
+# Regenerable
+node_modules/
+dist/
+build/
+.next/
+.cache/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
