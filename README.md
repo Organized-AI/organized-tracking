@@ -9,12 +9,14 @@ A CLI-first, white-label conversion-tracking monorepo. The **CLI is the control 
 
 | Doc | What it covers |
 |---|---|
-| [docs/cli-plan.md](docs/cli-plan.md) | Canonical architecture — why CLI over MCP, privacy & data-handling, the 6 absorbed tools, packages, phases P0–P7 |
+| [docs/cli-plan.md](docs/cli-plan.md) | Canonical architecture — why CLI over MCP, privacy & data-handling, the 6 absorbed tools, packages, phases P0–P7 (reconstructed) |
 | [docs/product-plan.md](docs/product-plan.md) | $250 white-label product + distribution, licensing reality, commerce flow, GTM Autoresearch +$150 add-on |
 | [docs/stape-registry.md](docs/stape-registry.md) | 169-template Stape capability registry, capability-gating, business presets |
 | [docs/mart-catalog.md](docs/mart-catalog.md) | Full Organized Mart catalog (18 SKUs) consolidated on mart.organizedai.vip |
 | [docs/meta-ads-integration.md](docs/meta-ads-integration.md) | Meta Ads CLI as the write executor behind `track meta *`; Meta Ads MCP as the allowlisted read/explore sidecar |
 | [docs/gtm-container-builds.md](docs/gtm-container-builds.md) | GTM build stack: GWS CLI as write executor, direct GTM API v2 as fallback/spine, Stape GTM MCP as read sidecar (replaces owntag/gtm-cli) |
+| [docs/stape-provisioning.md](docs/stape-provisioning.md) | sGTM infrastructure: Stape API as write executor for container lifecycle / domains / CAPI Gateway; stape-mcp-server as read sidecar |
+| [docs/ga4-integration.md](docs/ga4-integration.md) | GA4: ga-cli + Admin API writes behind `track ga4 *`; Data API + Analytics MCP reads; measurement-ID/MP-secret interlock with the registry |
 
 ## Core principle
 

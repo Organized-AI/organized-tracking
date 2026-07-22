@@ -1,0 +1,41 @@
+Organized Tracking
+Copyright 2026 Organized AI
+
+This product includes or depends on the following open-source software.
+Peer-installed dependencies are installed from their upstream sources at
+setup time and are not redistributed with this product; they are listed
+here for attribution and license clarity.
+
+--------------------------------------------------------------------------
+
+Google Workspace CLI (gws) — https://github.com/googleworkspace/cli
+Copyright Google LLC
+Licensed under the Apache License, Version 2.0.
+Peer-installed (npm: @googleworkspace/cli); not redistributed.
+
+ga-cli — https://github.com/sulimanbenhalim/ga-cli
+Licensed under the MIT License.
+Peer-installed (pip); not redistributed.
+
+Meta Ads CLI — https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli
+Copyright Meta Platforms, Inc.
+Governed by Meta's platform terms.
+Peer-installed (pip); not redistributed.
+
+stape-io/data-tag — https://github.com/stape-io/data-tag
+Copyright Stape Inc.
+Licensed under the Apache License, Version 2.0. Vendored.
+
+stape-io/data-client — https://github.com/stape-io/data-client
+Copyright Stape Inc.
+Licensed under the Apache License, Version 2.0. Vendored.
+
+Stape server-side template library (169 repositories) — https://github.com/stape-io
+Copyright Stape Inc.
+Licensed under the Apache License, Version 2.0.
+Fetched and version-pinned from upstream at `track add` time; not redistributed.
+
+--------------------------------------------------------------------------
+
+Licensed works retain their original copyright and license texts.
+See LICENSE for the license covering this repository's own code.

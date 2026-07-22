@@ -29,6 +29,13 @@ in the real `gtm-autoresearch` loop as source of truth.
 | E3 — cross-repo cross-reference | ⏳ Pending |
 | Meta Ads CLI + MCP integration plan | ✅ Complete (`docs/meta-ads-integration.md`) — CLI = write executor, MCP = allowlisted read sidecar |
 | GTM container-build stack decision | ✅ Locked (`docs/gtm-container-builds.md`) — GWS CLI + direct GTM API (writes), Stape GTM MCP (reads); owntag/gtm-cli dropped |
+| cli-plan.md reconstruction | ✅ Complete — was referenced everywhere but never committed; reconstructed with P0–P7 + the 6 absorbed tools |
+| Stape sGTM provisioning plan | ✅ Complete (`docs/stape-provisioning.md`) — Stape API writes, stape-mcp-server reads |
+| GA4 integration plan | ✅ Complete (`docs/ga4-integration.md`) — ga-cli/Admin API writes, Data API + Analytics MCP reads; gws-subsumes-ga-cli option flagged for P5 |
+| Apache NOTICE file | ✅ Complete (repo root) — six absorbed tools attributed |
+| EULA (PP0) | ⏳ Blocked on "Decisions to lock before listing" (product-plan.md) — resale/updates/seat scope |
+| E1–E3 (gtm-autoresearch adapter/UI/cross-ref) | ⏳ Blocked in this environment — sibling repo lives at `/Users/supabowl/gtm-autoresearch` (local Mac), not in the cloud session |
+| Package scaffolding (P0) | ⏳ Not started — repo is still docs-only |
 
 ### Ground-truth findings (E0)
 
