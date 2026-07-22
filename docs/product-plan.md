@@ -7,7 +7,7 @@ their own brand for their own clients. **Optional add-on:** GTM Autoresearch at
 
 **What $250 buys (decide + lock):** perpetual access to the repo snapshot at purchase
 + white-label rights for the buyer's own and client use. *Not* resale of the product
-itself. Bundled OSS (gtm-cli/ga-cli MIT · data-tag/data-client Apache-2.0) ships under
+itself. Bundled OSS (GWS CLI · ga-cli MIT · data-tag/data-client Apache-2.0) ships under
 its original licenses with notices retained.
 
 **Storefront:** mart.organizedai.vip · **Pay:** Stripe (one-time) · **Access gate:**
@@ -19,14 +19,14 @@ GitPaywall (primary) · **Org:** github.com/organized-ai
 
 | Component | License | Resale OK? | Obligation |
 |---|---|---|---|
-| owntag/gtm-cli | MIT | peer-installed (npm) | Retain copyright + license text |
+| GWS CLI (Google official, `@googleworkspace/cli`) | Apache-2.0 | peer-installed (npm) | Retain copyright + license text; governed by Google API terms |
 | sulimanbenhalim/ga-cli | MIT | peer-installed (pip) | Retain copyright + license text |
 | Meta Ads CLI (official) | Meta platform terms | peer-installed (pip) | Buyer installs; governed by Meta's terms |
 | stape-io/data-tag | Apache-2.0 | vendored | Retain notices + ship `NOTICE` |
 | stape-io/data-client | Apache-2.0 | vendored | Retain notices + ship `NOTICE` |
 | **your layer** (cli wrap, events, destinations, presets, privacy arch) | **your EULA** | the product | the actual value sold |
 
-**Peer-install, don't redistribute the CLIs.** The product *depends on* gtm-cli /
+**Peer-install, don't redistribute the CLIs.** The product *depends on* GWS CLI /
 ga-cli / Meta Ads CLI (installed via npm/pip at setup) rather than bundling them — so
 you never redistribute Meta's tool or anyone's binary, sidestepping the resale-license
 question entirely. Only the Stape `.tpl` templates (Apache-2.0) are vendored, with

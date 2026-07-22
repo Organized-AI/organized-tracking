@@ -14,6 +14,7 @@ A CLI-first, white-label conversion-tracking monorepo. The **CLI is the control 
 | [docs/stape-registry.md](docs/stape-registry.md) | 169-template Stape capability registry, capability-gating, business presets |
 | [docs/mart-catalog.md](docs/mart-catalog.md) | Full Organized Mart catalog (18 SKUs) consolidated on mart.organizedai.vip |
 | [docs/meta-ads-integration.md](docs/meta-ads-integration.md) | Meta Ads CLI as the write executor behind `track meta *`; Meta Ads MCP as the allowlisted read/explore sidecar |
+| [docs/gtm-container-builds.md](docs/gtm-container-builds.md) | GTM build stack: GWS CLI as write executor, direct GTM API v2 as fallback/spine, Stape GTM MCP as read sidecar (replaces owntag/gtm-cli) |
 
 ## Core principle
 
