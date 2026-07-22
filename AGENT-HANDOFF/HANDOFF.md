@@ -27,6 +27,7 @@ in the real `gtm-autoresearch` loop as source of truth.
 | E1 — gtm-round-adapter | ⏳ Pending |
 | E2 — S7 scenario in track-lab UI | ⏳ Pending (demo HTML exists as a mock) |
 | E3 — cross-repo cross-reference | ⏳ Pending |
+| Meta Ads CLI + MCP integration plan | ✅ Complete (`docs/meta-ads-integration.md`) — CLI = write executor, MCP = allowlisted read sidecar |
 
 ### Ground-truth findings (E0)
 
