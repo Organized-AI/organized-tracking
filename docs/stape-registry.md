@@ -18,7 +18,7 @@ capabilities that business needs** via `track add <capability>`.
 ```
 tracking.config.ts                track add meta-capi
   business: "shopify-store"   ->   resolve manifest -> fetch templates + deps
-  capabilities:                    -> deploy via gtm-cli -> record in config
+  capabilities:                    -> deploy via GWS CLI / GTM API -> record in config
     - ga4
     - meta-capi          one CLI, every capability available;
     - tiktok             a given install only pulls what it declares.
