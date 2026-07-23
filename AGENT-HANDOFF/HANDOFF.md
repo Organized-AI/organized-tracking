@@ -35,7 +35,7 @@ in the real `gtm-autoresearch` loop as source of truth.
 | Apache NOTICE file | ✅ Complete (repo root) — six absorbed tools attributed |
 | EULA (PP0) | ⏳ Blocked on "Decisions to lock before listing" (product-plan.md) — resale/updates/seat scope |
 | E1–E3 (gtm-autoresearch adapter/UI/cross-ref) | ⏳ Blocked in this environment — sibling repo lives at `/Users/supabowl/gtm-autoresearch` (local Mac), not in the cloud session |
-| Package scaffolding (P0) | ⏳ Not started — repo is still docs-only |
+| Package scaffolding (P0) | ✅ Complete — pnpm workspaces + Turborepo, `packages/track-core` (exit codes, config precedence, GtmClient/MetaClient/Ga4Client/StapeClient interfaces, registry types) + `packages/track-cli` (noun-verb dispatch, global flags, `track version show` smoke command). Builds, typechecks, and runs clean. |
 
 ### Ground-truth findings (E0)
 
@@ -57,9 +57,14 @@ in the real `gtm-autoresearch` loop as source of truth.
 
 ### Next steps
 
-1. E1 — build `gtm-round-adapter` mapping a loop-results run into the shared envelope.
-2. E2 — render S7 from the adapter instead of hand-authored `steps`.
-3. E3 — add `DOCUMENTATION/track-lab-integration.md` cross-reference (in gtm-autoresearch, their call).
+1. P1 — implement `GtmClient` against GWS CLI (shell-out) + direct GTM API v2 fallback; wire `track gtm export/diff/apply/publish` behind the git gate.
+2. P2 — `packages/track-registry`: capability manifest resolver over the Stape template registry; `track add/remove/list/diff`.
+3. P3 — implement `StapeClient` against the Stape API (container lifecycle, domains, CAPI Gateway) per `docs/stape-provisioning.md`.
+4. P4 — implement `MetaClient` against Meta Ads CLI (shell-out) per `docs/meta-ads-integration.md`.
+5. P5 — implement `Ga4Client` against ga-cli + GA4 Admin API per `docs/ga4-integration.md`.
+6. E1 — build `gtm-round-adapter` mapping a loop-results run into the shared envelope.
+7. E2 — render S7 from the adapter instead of hand-authored `steps`.
+8. E3 — add `DOCUMENTATION/track-lab-integration.md` cross-reference (in gtm-autoresearch, their call).
 
 ### Important notes
 
