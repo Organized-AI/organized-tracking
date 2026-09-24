@@ -19,3 +19,7 @@ A CLI-first, white-label conversion-tracking monorepo. The **CLI is the control 
 ## Core principle
 
 The CLI owns every write (`export → git → PR → publish`, gated on a green debug-agent run). No PII through a hosted LLM — the write path has no model at all; the read path uses a local LLM + redaction. Capable of every destination via the registry, but each install activates only the capabilities it declares.
+
+---
+
+Maintained by Jordaaan Hill ([LinkedIn](https://www.linkedin.com/in/jordaaanhill)).
